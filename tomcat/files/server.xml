@@ -69,7 +69,7 @@
          APR (HTTP/AJP) Connector: /docs/apr.html
          Define a non-SSL HTTP/1.1 Connector on port 8080
     -->
-    {% if SSLEnabled %}
+    {% if SSLEnabled is defined and SSLEnabled == True %}
     <Connector port="{{ port }}" protocol="{{ protocol }}"
       connectionTimeout="{{ connectionTimeout }}" URIEncoding="{{ URIEncoding }}" maxHttpHeaderSize="{{ maxHttpHeaderSize }}" maxThreads="{{ maxThreads }}"
       minSpareThreads="{{ maxThreads }}"
@@ -147,7 +147,9 @@
       {% for id, site in sites %}
       <Host name="{{ id }}" appBase="{{ site.appBase }}" debug="{{ site.debug }}" unpackWARs="{{ site.unpackWARs }}">
         <Context path="{{ site.path }}" docBase="{{ site.docBase }}" debug="{{ site.debug }}" reloadable="{{ site.reloadable }}"/>
+      {% if site.alias is defined %}
         <Alias>{{ site.alias }}</Alias>
+      {% endif %}
         <Logger className="org.apache.catalina.logger.FileLogger"
         directory="logs"  prefix="{{ id }}\_log." suffix=".txt" timestamp="true"/>
       </Host>
